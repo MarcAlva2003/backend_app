@@ -19,7 +19,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 # from django.conf.urls import url
 
 urlpatterns = [
-    path('public-api/', include('public_api.urls')),
+    path('companies/', include('companies.urls')),
     path('users/', include('users.urls')),
     re_path(r'^auth/', obtain_auth_token),
     path('admin/', admin.site.urls),
