@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Company
 from .serializers import CompanySerializer
-from public_api import serializers
+from companies import serializers
+from rest_framework import permissions
 
 NOT_FOUND_MESSAGE_404 = "404 - Sorry. No company found."
 COMPANT_CREATED_201 = "Company added successfuly."
@@ -22,8 +23,7 @@ class CompanyList(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({"Fail": NOT_FOUND_MESSAGE_404}, status=status.HTTP_404_NOT_FOUND)
 
-
-class SingleCompany(APIView):
+class SingleCompanyPublic(APIView):
   def get(self, request, pk):
     company = Company.objects.filter(pk = pk).first()
     serializer = CompanySerializer(company)
@@ -31,6 +31,9 @@ class SingleCompany(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({"Fail": NOT_FOUND_MESSAGE_404}, status=status.HTTP_404_NOT_FOUND)
 
+
+class SingleCompany(APIView):
+  permission_classes = [permissions.IsAuthenticated]
   def post(self, request, format=None):
     serializer = CompanySerializer(data=request.data)
     if serializer.is_valid(): 
